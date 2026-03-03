@@ -29,7 +29,7 @@ export default function RootLayout({
       <body>
         <SideNav />
         <main
-          style={{ minHeight: '100dvh', paddingLeft: 0, paddingBottom: '72px' }}
+          style={{ minHeight: '100dvh', paddingBottom: '72px' }}
           className="md:pl-[220px] md:pb-0"
         >
           {children}
