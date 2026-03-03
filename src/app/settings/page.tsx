@@ -618,7 +618,7 @@ function IntegrationsSection() {
             Share your progress with a partner (e.g., your spouse) so they can help keep you accountable.
           </p>
           {settings.sharedWithEmails.map(email => (
-            <div key={email} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+            <div key={email} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>
                 {email[0].toUpperCase()}
               </div>
@@ -685,14 +685,14 @@ export default function SettingsPage() {
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)' }}>
       {/* Header */}
-      <div className="sticky top-0 z-40 px-4" style={{ background: 'rgba(8,13,26,0.97)', backdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border)', paddingTop: 16, paddingBottom: 0 }}>
+      <div className="sticky top-0 z-40 px-4" style={{ background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingTop: 16, paddingBottom: 0 }}>
         <div className="flex items-center gap-2 mb-3">
           <Settings size={18} color="var(--accent)" />
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Settings</h1>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-0 overflow-x-auto" style={{ scrollbarWidth: 'none', borderBottom: '1px solid var(--border)', marginLeft: -16, marginRight: -16, paddingLeft: 16 }}>
+        <div className="flex gap-0 overflow-x-auto" style={{ scrollbarWidth: 'none', borderBottom: '1px solid rgba(255,255,255,0.06)', marginLeft: -16, marginRight: -16, paddingLeft: 16 }}>
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}

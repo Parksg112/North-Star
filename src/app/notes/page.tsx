@@ -291,7 +291,7 @@ export default function NotesPage() {
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)' }}>
       {/* Header */}
-      <div className="sticky top-0 z-40 px-4" style={{ background: 'rgba(8,13,26,0.97)', backdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border)', paddingTop: 16, paddingBottom: 12 }}>
+      <div className="sticky top-0 z-40 px-4" style={{ background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingTop: 16, paddingBottom: 12 }}>
         <div className="flex items-center gap-2 mb-3">
           <NotebookPen size={18} color="var(--accent)" />
           <h1 style={{ fontSize: 18, fontWeight: 700, flex: 1 }}>Notes</h1>

@@ -205,7 +205,7 @@ function DayView({ date, onNewEvent }: { date: Date; onNewEvent: (hour: number) 
           return (
             <div
               key={hour}
-              style={{ display: 'flex', borderBottom: '1px solid var(--border)', minHeight: 64, position: 'relative' }}
+              style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.06)', minHeight: 64, position: 'relative' }}
             >
               <div
                 style={{
@@ -287,7 +287,7 @@ function WeekView({ date, onDayClick }: { date: Date; onDayClick: (d: Date) => v
   return (
     <div style={{ overflowX: 'auto' }}>
       {/* Day headers */}
-      <div style={{ display: 'grid', gridTemplateColumns: '50px repeat(7, 1fr)', borderBottom: '1px solid var(--border)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '50px repeat(7, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div />
         {days.map(d => (
           <div
@@ -316,7 +316,7 @@ function WeekView({ date, onDayClick }: { date: Date; onDayClick: (d: Date) => v
 
       {/* Time grid */}
       {HOURS.map(hour => (
-        <div key={hour} style={{ display: 'grid', gridTemplateColumns: '50px repeat(7, 1fr)', borderBottom: '1px solid var(--border)', minHeight: 50 }}>
+        <div key={hour} style={{ display: 'grid', gridTemplateColumns: '50px repeat(7, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.06)', minHeight: 50 }}>
           <div style={{ fontSize: 10, color: 'var(--text-muted)', padding: '4px 6px 0 0', textAlign: 'right' }}>
             {format(new Date().setHours(hour, 0), 'h a')}
           </div>
@@ -358,7 +358,7 @@ function MonthView({ date, onDayClick }: { date: Date; onDayClick: (d: Date) => 
   return (
     <div>
       {/* Day headers */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid var(--border)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => (
           <div key={d} style={{ textAlign: 'center', padding: '8px 0', fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, letterSpacing: 0.5 }}>
             {d}
@@ -377,7 +377,7 @@ function MonthView({ date, onDayClick }: { date: Date; onDayClick: (d: Date) => 
               style={{
                 minHeight: 80, padding: 6, cursor: 'pointer',
                 borderRight: '1px solid var(--border)',
-                borderBottom: '1px solid var(--border)',
+                borderBottom: '1px solid rgba(255,255,255,0.06)',
                 background: isToday(d) ? 'rgba(99,102,241,0.08)' : 'transparent',
                 opacity: inMonth ? 1 : 0.35,
               }}
@@ -425,7 +425,7 @@ function TemplatesDrawer({ open, onClose, onSelect }: {
     <div className="fixed inset-0 z-[150] flex items-end" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="w-full animate-slide-up" style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border)', borderRadius: '16px 16px 0 0', maxHeight: '70dvh', overflowY: 'auto' }}>
-        <div style={{ padding: '16px 16px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ padding: '16px 16px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <h3 style={{ fontSize: 15, fontWeight: 600 }}>Templates</h3>
           <button onClick={onClose} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 8, padding: '4px 8px', color: 'var(--text-muted)' }}>
             <X size={16} />
@@ -505,7 +505,7 @@ export default function PlanPage() {
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
-      <div className="sticky top-0 z-40" style={{ background: 'rgba(8,13,26,0.97)', backdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border)' }}>
+      <div className="sticky top-0 z-40" style={{ background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         {/* View switcher */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-2">
           <Calendar size={18} color="var(--accent)" />
@@ -575,9 +575,9 @@ export default function PlanPage() {
       </div>
 
       {/* Google Calendar notice */}
-      <div className="px-4 py-2 flex items-center gap-2" style={{ background: 'rgba(59,130,246,0.1)', borderTop: '1px solid rgba(59,130,246,0.2)' }}>
+      <div className="px-4 py-2 flex items-center gap-2" style={{ background: 'rgba(66,133,244,0.08)', borderTop: '1px solid rgba(59,130,246,0.2)' }}>
         <Link2 size={13} color="#3b82f6" />
-        <span style={{ fontSize: 11, color: '#3b82f6' }}>
+        <span style={{ fontSize: 11, color: 'var(--accent)' }}>
           Connect Google Calendar in Settings to sync events
         </span>
       </div>

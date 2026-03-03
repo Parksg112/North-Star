@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#080d1a",
+  themeColor: "#0a0a0a",
 };
 
 export default function RootLayout({
@@ -23,13 +23,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SideNav />
-        {/* Main content: offset for sidebar on md+, bottom nav on mobile */}
         <main
-          style={{
-            minHeight: '100dvh',
-            paddingLeft: 0,
-            paddingBottom: '72px',
-          }}
+          style={{ minHeight: '100dvh', paddingLeft: 0, paddingBottom: '72px' }}
           className="md:pl-[220px] md:pb-0"
         >
           {children}

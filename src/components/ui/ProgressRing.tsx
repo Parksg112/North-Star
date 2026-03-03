@@ -1,7 +1,7 @@
 'use client';
 
 interface ProgressRingProps {
-  progress: number; // 0–100
+  progress: number;
   size?: number;
   strokeWidth?: number;
   color?: string;
@@ -12,9 +12,9 @@ interface ProgressRingProps {
 export function ProgressRing({
   progress,
   size = 80,
-  strokeWidth = 6,
-  color = '#6366f1',
-  trackColor = '#1e2d4a',
+  strokeWidth = 5,
+  color = '#4285F4',
+  trackColor = 'rgba(255,255,255,0.07)',
   children,
 }: ProgressRingProps) {
   const r = (size - strokeWidth) / 2;
@@ -24,37 +24,16 @@ export function ProgressRing({
   return (
     <div style={{ position: 'relative', width: size, height: size }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={trackColor} strokeWidth={strokeWidth} />
         <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          fill="none"
-          stroke={trackColor}
-          strokeWidth={strokeWidth}
-        />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          fill="none"
-          stroke={color}
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-          strokeDasharray={circ}
-          strokeDashoffset={offset}
-          style={{ transition: 'stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1)' }}
+          cx={size / 2} cy={size / 2} r={r} fill="none"
+          stroke={color} strokeWidth={strokeWidth} strokeLinecap="round"
+          strokeDasharray={circ} strokeDashoffset={offset}
+          style={{ transition: 'stroke-dashoffset 0.65s cubic-bezier(0.4,0,0.2,1)' }}
         />
       </svg>
       {children && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {children}
         </div>
       )}
