@@ -53,6 +53,11 @@
   --radius-full: 9999px;
 }
 
+/* ─── Layout: sidebar offset ─────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  main { padding-left: 220px !important; padding-bottom: 0 !important; }
+}
+
 /* ─── Base reset ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
