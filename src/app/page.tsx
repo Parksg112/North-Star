@@ -2,20 +2,34 @@
 
 import { useState } from 'react';
 import { format, startOfWeek, endOfWeek, isToday } from 'date-fns';
-import {
-  TrendingUp, CheckCircle2, Target, Trophy,
-  Flame, Calendar, Star, Zap
-} from 'lucide-react';
+import { TrendingUp, CheckCircle2, Target, Trophy, Flame, Calendar, Star, Zap } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { ProgressRing } from '@/components/ui/ProgressRing';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import {
-  getGoalProgress, getTodayGoalProgress, getWeekGoalProgress,
-  formatMetricValue,
-} from '@/lib/utils';
+import { getGoalProgress, getTodayGoalProgress, getWeekGoalProgress, formatMetricValue } from '@/lib/utils';
 import type { Goal } from '@/lib/types';
 
+/* ─── Gemini star mark ─────────────────────────────────────────────────────── */
+function GeminiMark({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <defs>
+        <linearGradient id="gm-hd" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#4285F4" />
+          <stop offset="50%"  stopColor="#0ea5e9" />
+          <stop offset="100%" stopColor="#c084fc" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M12 2C12 2 12.8 7.2 15.5 9.5C18.2 11.8 22 12 22 12C22 12 18.2 12.2 15.5 14.5C12.8 16.8 12 22 12 22C12 22 11.2 16.8 8.5 14.5C5.8 12.2 2 12 2 12C2 12 5.8 11.8 8.5 9.5C11.2 7.2 12 2 12 2Z"
+        fill="url(#gm-hd)"
+      />
+    </svg>
+  );
+}
+
+/* ─── Log Progress Modal ─────────────────────────────────────────────────────── */
 function LogProgressModal({ goal, onClose }: { goal: Goal; onClose: () => void }) {
   const logGoalProgress = useStore(s => s.logGoalProgress);
   const [value, setValue] = useState('');
@@ -24,29 +38,26 @@ function LogProgressModal({ goal, onClose }: { goal: Goal; onClose: () => void }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const v = parseFloat(value);
-    if (!isNaN(v) && v > 0) {
-      logGoalProgress(goal.id, v, note || undefined);
-      onClose();
-    }
+    if (!isNaN(v) && v > 0) { logGoalProgress(goal.id, v, note || undefined); onClose(); }
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div style={{ textAlign: 'center', fontSize: 36, marginBottom: 4 }}>{goal.icon}</div>
+      <div style={{ textAlign: 'center', fontSize: 40, marginBottom: 2 }}>{goal.icon}</div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontWeight: 600, fontSize: 16 }}>{goal.title}</div>
-        <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 2 }}>
+        <div style={{ fontWeight: 600, fontSize: 16, letterSpacing: -0.4 }}>{goal.title}</div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 3 }}>
           {formatMetricValue(goal.current, goal.unit)} / {formatMetricValue(goal.target, goal.unit)}
         </div>
       </div>
       <div>
-        <label style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 6, display: 'block' }}>
+        <label style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}>
           Amount ({goal.unit})
         </label>
-        <input type="number" step="any" min="0" value={value} onChange={e => setValue(e.target.value)} placeholder="e.g. 3" autoFocus required />
+        <input type="number" step="any" min="0" value={value} onChange={e => setValue(e.target.value)} placeholder="0" autoFocus required />
       </div>
       <div>
-        <label style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 6, display: 'block' }}>Note (optional)</label>
+        <label style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}>Note (optional)</label>
         <input type="text" value={note} onChange={e => setNote(e.target.value)} placeholder="How did it go?" />
       </div>
       <div className="flex gap-2">
@@ -57,29 +68,40 @@ function LogProgressModal({ goal, onClose }: { goal: Goal; onClose: () => void }
   );
 }
 
+/* ─── Goal Card ──────────────────────────────────────────────────────────────── */
 function GoalCard({ goal, onLog }: { goal: Goal; onLog: () => void }) {
   const progress = getGoalProgress(goal);
   return (
     <div
       onClick={onLog}
       className="flex items-center gap-3 p-3 rounded-xl cursor-pointer"
-      style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', transition: 'background 0.15s' }}
+      style={{
+        background: '#161616',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 16,
+        transition: 'background 0.18s, border-color 0.18s',
+      }}
     >
-      <ProgressRing progress={progress} size={48} strokeWidth={4} color={goal.color}>
-        <span style={{ fontSize: 14 }}>{goal.icon}</span>
+      <ProgressRing progress={progress} size={46} strokeWidth={4} color={goal.color}>
+        <span style={{ fontSize: 13 }}>{goal.icon}</span>
       </ProgressRing>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>{goal.title}</div>
-        <div className="progress-bar" style={{ height: 4 }}>
+        <div style={{ fontWeight: 500, fontSize: 13, marginBottom: 5, letterSpacing: -0.2, color: 'var(--text-primary)' }}>
+          {goal.title}
+        </div>
+        <div className="progress-bar" style={{ height: 3 }}>
           <div className="progress-bar-fill" style={{ width: `${progress}%`, background: goal.color, height: '100%' }} />
         </div>
-        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 3 }}>
+        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>
           {formatMetricValue(goal.current, goal.unit)} of {formatMetricValue(goal.target, goal.unit)}
         </div>
       </div>
       <div style={{ textAlign: 'right', flexShrink: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: goal.color }}>{progress}%</div>
-        <div style={{ fontSize: 10, color: 'var(--text-muted)', background: 'var(--bg-secondary)', borderRadius: 4, padding: '1px 5px', marginTop: 2 }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: goal.color, letterSpacing: -0.5 }}>{progress}%</div>
+        <div style={{
+          fontSize: 9, color: 'var(--text-muted)', marginTop: 2, textTransform: 'uppercase',
+          letterSpacing: 0.4, background: 'rgba(255,255,255,0.05)', borderRadius: 4, padding: '1px 5px',
+        }}>
           {goal.period}
         </div>
       </div>
@@ -87,6 +109,25 @@ function GoalCard({ goal, onLog }: { goal: Goal; onLog: () => void }) {
   );
 }
 
+/* ─── Section header ─────────────────────────────────────────────────────────── */
+function SectionHeader({ icon, color, title, sub, right }: {
+  icon: React.ReactNode; color: string; title: string; sub: string; right?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-3 mb-4">
+      <div style={{ background: color + '18', borderRadius: 10, padding: '7px 9px', display: 'flex' }}>
+        {icon}
+      </div>
+      <div>
+        <h2 style={{ fontSize: 15, fontWeight: 600, letterSpacing: -0.3 }}>{title}</h2>
+        <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 1 }}>{sub}</p>
+      </div>
+      {right && <div className="ml-auto">{right}</div>}
+    </div>
+  );
+}
+
+/* ─── Daily Section ──────────────────────────────────────────────────────────── */
 function DailySection() {
   const goals = useStore(s => s.goals);
   const events = useStore(s => s.events);
@@ -99,42 +140,49 @@ function DailySection() {
 
   return (
     <section>
-      <div className="flex items-center gap-2 mb-4">
-        <div style={{ background: 'rgba(251,191,36,0.15)', borderRadius: 8, padding: '6px 8px' }}>
-          <Flame size={16} color="#f59e0b" />
-        </div>
-        <div>
-          <h2 style={{ fontSize: 16, fontWeight: 700 }}>Today</h2>
-          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{format(new Date(), 'EEEE, MMMM d')}</p>
-        </div>
-        <div className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: 'var(--accent-muted)', border: '1px solid rgba(99,102,241,0.2)' }}>
-          <Zap size={13} color="var(--accent)" />
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>{overallProgress}%</span>
-        </div>
-      </div>
-      <div className="grid grid-cols-3 gap-3 mb-4">
+      <SectionHeader
+        icon={<Flame size={15} color="#F4B400" />}
+        color="#F4B400"
+        title="Today"
+        sub={format(new Date(), 'EEEE, MMMM d')}
+        right={
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+            style={{ background: 'rgba(66,133,244,0.1)', border: '1px solid rgba(66,133,244,0.2)' }}>
+            <Zap size={12} color="var(--accent)" />
+            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)' }}>{overallProgress}%</span>
+          </div>
+        }
+      />
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-2 mb-4">
         {[
-          { label: 'Daily Goals', value: dailyGoals.length, icon: Target, color: '#6366f1' },
-          { label: 'Events', value: todayEvents.length, icon: Calendar, color: '#3b82f6' },
-          { label: 'Done', value: completedEvents, icon: CheckCircle2, color: '#10b981' },
-        ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="flex flex-col items-center justify-center p-3 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', gap: 4 }}>
-            <Icon size={18} color={color} />
-            <div style={{ fontSize: 22, fontWeight: 700 }}>{value}</div>
-            <div style={{ fontSize: 10, color: 'var(--text-muted)', textAlign: 'center' }}>{label}</div>
+          { label: 'Daily Goals', value: dailyGoals.length,     color: '#4285F4' },
+          { label: 'Events',      value: todayEvents.length,    color: '#0F9D58' },
+          { label: 'Done',        value: completedEvents,       color: '#DB4437' },
+        ].map(({ label, value, color }) => (
+          <div key={label} style={{
+            background: '#161616', border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 16, padding: '14px 8px', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: 24, fontWeight: 700, color, letterSpacing: -1 }}>{value}</div>
+            <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.4 }}>{label}</div>
           </div>
         ))}
       </div>
+
       {dailyGoals.length > 0 ? (
         <div className="flex flex-col gap-2">
           {dailyGoals.map(g => <GoalCard key={g.id} goal={g} onLog={() => setSelectedGoal(g)} />)}
         </div>
       ) : (
-        <div className="flex flex-col items-center py-8 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-          <Target size={28} color="var(--text-muted)" style={{ marginBottom: 8 }} />
+        <div className="flex flex-col items-center py-10 rounded-2xl"
+          style={{ background: '#161616', border: '1px solid rgba(255,255,255,0.07)' }}>
+          <Target size={26} color="var(--text-muted)" style={{ marginBottom: 8, opacity: 0.5 }} />
           <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>No daily goals — add them in Settings</p>
         </div>
       )}
+
       <Modal open={!!selectedGoal} onClose={() => setSelectedGoal(null)} title="Log Progress">
         {selectedGoal && <LogProgressModal goal={selectedGoal} onClose={() => setSelectedGoal(null)} />}
       </Modal>
@@ -142,6 +190,7 @@ function DailySection() {
   );
 }
 
+/* ─── Weekly Section ─────────────────────────────────────────────────────────── */
 function WeeklySection() {
   const goals = useStore(s => s.goals);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
@@ -153,23 +202,21 @@ function WeeklySection() {
 
   return (
     <section>
-      <div className="flex items-center gap-2 mb-4">
-        <div style={{ background: 'rgba(99,102,241,0.15)', borderRadius: 8, padding: '6px 8px' }}>
-          <TrendingUp size={16} color="var(--accent)" />
-        </div>
-        <div>
-          <h2 style={{ fontSize: 16, fontWeight: 700 }}>This Week</h2>
-          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{format(weekStart, 'MMM d')} – {format(weekEnd, 'MMM d')}</p>
-        </div>
-        <div className="ml-auto" style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>{avgProgress}% avg</div>
-      </div>
+      <SectionHeader
+        icon={<TrendingUp size={15} color="#4285F4" />}
+        color="#4285F4"
+        title="This Week"
+        sub={`${format(weekStart, 'MMM d')} – ${format(weekEnd, 'MMM d')}`}
+        right={<span style={{ fontSize: 12, fontWeight: 600, color: '#4285F4' }}>{avgProgress}% avg</span>}
+      />
       {weeklyGoals.length > 0 ? (
         <div className="flex flex-col gap-2">
           {weeklyGoals.map(g => <GoalCard key={g.id} goal={g} onLog={() => setSelectedGoal(g)} />)}
         </div>
       ) : (
-        <div className="flex flex-col items-center py-8 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-          <TrendingUp size={28} color="var(--text-muted)" style={{ marginBottom: 8 }} />
+        <div className="flex flex-col items-center py-10 rounded-2xl"
+          style={{ background: '#161616', border: '1px solid rgba(255,255,255,0.07)' }}>
+          <TrendingUp size={26} color="var(--text-muted)" style={{ marginBottom: 8, opacity: 0.5 }} />
           <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>No weekly goals — add them in Settings</p>
         </div>
       )}
@@ -180,6 +227,7 @@ function WeeklySection() {
   );
 }
 
+/* ─── Yearly Section ─────────────────────────────────────────────────────────── */
 function YearlySection() {
   const goals = useStore(s => s.goals);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
@@ -190,35 +238,55 @@ function YearlySection() {
 
   return (
     <section>
-      <div className="flex items-center gap-2 mb-4">
-        <div style={{ background: 'rgba(16,185,129,0.15)', borderRadius: 8, padding: '6px 8px' }}>
-          <Trophy size={16} color="#10b981" />
+      <SectionHeader
+        icon={<Trophy size={15} color="#0F9D58" />}
+        color="#0F9D58"
+        title={`${year} Goals`}
+        sub={`Day ${dayOfYear} · ${yearProgress}% through the year`}
+      />
+
+      {/* Year progress card — hero gradient */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1a56db 0%, #1a1560 100%)',
+        border: '1px solid rgba(66,133,244,0.25)',
+        borderRadius: 20,
+        padding: '18px 20px',
+        marginBottom: 16,
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Shimmer overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%)',
+          pointerEvents: 'none',
+        }} />
+        <div className="flex justify-between mb-3">
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Jan 1</span>
+          <span style={{ fontSize: 11, fontWeight: 600, color: '#7aadff', letterSpacing: 0.5 }}>Day {dayOfYear}</span>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Dec 31</span>
         </div>
-        <div>
-          <h2 style={{ fontSize: 16, fontWeight: 700 }}>{year} Goals</h2>
-          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Day {dayOfYear} · {yearProgress}% through {year}</p>
+        <div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 9999, height: 6, overflow: 'hidden' }}>
+          <div style={{
+            height: '100%', borderRadius: 9999,
+            width: `${yearProgress}%`,
+            background: 'linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6))',
+            transition: 'width 0.65s cubic-bezier(0.4,0,0.2,1)',
+          }} />
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 10, fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>
+          {365 - dayOfYear} days remaining in {year}
         </div>
       </div>
-      <div className="p-4 rounded-xl mb-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-        <div className="flex justify-between mb-2">
-          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Jan 1</span>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#10b981' }}>Day {dayOfYear}</span>
-          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Dec 31</span>
-        </div>
-        <div className="progress-bar" style={{ height: 8 }}>
-          <div className="progress-bar-fill" style={{ width: `${yearProgress}%`, background: 'linear-gradient(90deg, #6366f1, #10b981)', height: '100%' }} />
-        </div>
-        <div style={{ textAlign: 'center', marginTop: 8, fontSize: 12, color: 'var(--text-muted)' }}>
-          {365 - dayOfYear} days remaining
-        </div>
-      </div>
+
       {yearlyGoals.length > 0 ? (
         <div className="flex flex-col gap-2">
           {yearlyGoals.map(g => <GoalCard key={g.id} goal={g} onLog={() => setSelectedGoal(g)} />)}
         </div>
       ) : (
-        <div className="flex flex-col items-center py-8 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-          <Trophy size={28} color="var(--text-muted)" style={{ marginBottom: 8 }} />
+        <div className="flex flex-col items-center py-10 rounded-2xl"
+          style={{ background: '#161616', border: '1px solid rgba(255,255,255,0.07)' }}>
+          <Trophy size={26} color="var(--text-muted)" style={{ marginBottom: 8, opacity: 0.5 }} />
           <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>No yearly goals — add them in Settings</p>
         </div>
       )}
@@ -229,6 +297,7 @@ function YearlySection() {
   );
 }
 
+/* ─── Dashboard Page ─────────────────────────────────────────────────────────── */
 export default function DashboardPage() {
   const goals = useStore(s => s.goals);
   const events = useStore(s => s.events);
@@ -237,39 +306,75 @@ export default function DashboardPage() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg-primary)' }}>
-      <div className="sticky top-0 z-40 px-4" style={{ background: 'rgba(8,13,26,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border)', paddingTop: 16, paddingBottom: 12 }}>
-        <div className="flex items-center justify-between">
+      {/* Sticky header */}
+      <div className="sticky top-0 z-40 px-4 glass" style={{ paddingTop: 16, paddingBottom: 14 }}>
+        <div className="flex items-center justify-between max-w-2xl mx-auto">
           <div>
-            <div className="flex items-center gap-2">
-              <Star size={18} color="var(--accent)" fill="var(--accent)" />
-              <h1 style={{ fontSize: 20, fontWeight: 800 }}>North Star</h1>
+            <div className="flex items-center gap-2.5">
+              <GeminiMark size={22} />
+              <h1 style={{ fontSize: 19, fontWeight: 700, letterSpacing: -0.6 }}>North Star</h1>
             </div>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 1 }}>{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+            <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2, letterSpacing: 0.1 }}>
+              {format(new Date(), 'EEEE, MMMM d, yyyy')}
+            </p>
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: 'rgba(251,191,36,0.15)', border: '1px solid rgba(251,191,36,0.3)' }}>
-            <Flame size={14} color="#f59e0b" />
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#f59e0b' }}>7 day streak</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+            style={{ background: 'rgba(244,180,0,0.1)', border: '1px solid rgba(244,180,0,0.22)' }}>
+            <Flame size={13} color="#F4B400" />
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#F4B400' }}>7 day streak</span>
           </div>
         </div>
       </div>
 
-      <div className="px-4 py-4 flex flex-col gap-8 max-w-2xl mx-auto">
+      <div className="px-4 py-5 flex flex-col gap-8 max-w-2xl mx-auto">
+
+        {/* Hero stat cards */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-4 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.05))', border: '1px solid rgba(99,102,241,0.25)' }}>
-            <div className="flex items-center gap-2 mb-1"><Target size={16} color="var(--accent)" /><span style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>Goals</span></div>
-            <div style={{ fontSize: 28, fontWeight: 800 }}>{goals.filter(g => g.status === 'active').length}</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{completedGoals} fully complete</div>
+          {/* Goals card — blue gradient */}
+          <div style={{
+            background: 'linear-gradient(135deg, #1a56db 0%, #1a1560 100%)',
+            border: '1px solid rgba(66,133,244,0.25)',
+            borderRadius: 20, padding: '18px 16px',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 60%)', pointerEvents: 'none' }} />
+            <div className="flex items-center gap-2 mb-2">
+              <Target size={14} color="rgba(255,255,255,0.7)" />
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: 0.5 }}>Goals</span>
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', letterSpacing: -2, lineHeight: 1 }}>
+              {goals.filter(g => g.status === 'active').length}
+            </div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
+              {completedGoals} fully complete
+            </div>
           </div>
-          <div className="p-4 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05))', border: '1px solid rgba(16,185,129,0.25)' }}>
-            <div className="flex items-center gap-2 mb-1"><Calendar size={16} color="#10b981" /><span style={{ fontSize: 12, color: '#10b981', fontWeight: 600 }}>Today</span></div>
-            <div style={{ fontSize: 28, fontWeight: 800 }}>{todayEvents.length}</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>events scheduled</div>
+
+          {/* Events card — green tint */}
+          <div style={{
+            background: 'linear-gradient(135deg, #0d3d2e 0%, #111111 100%)',
+            border: '1px solid rgba(15,157,88,0.2)',
+            borderRadius: 20, padding: '18px 16px',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(15,157,88,0.08) 0%, transparent 60%)', pointerEvents: 'none' }} />
+            <div className="flex items-center gap-2 mb-2">
+              <Calendar size={14} color="rgba(15,157,88,0.8)" />
+              <span style={{ fontSize: 11, color: 'rgba(15,157,88,0.7)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: 0.5 }}>Today</span>
+            </div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', letterSpacing: -2, lineHeight: 1 }}>
+              {todayEvents.length}
+            </div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>
+              events scheduled
+            </div>
           </div>
         </div>
+
         <DailySection />
         <WeeklySection />
         <YearlySection />
-        <div style={{ height: 16 }} />
+        <div style={{ height: 8 }} />
       </div>
     </div>
   );

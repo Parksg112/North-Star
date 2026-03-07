@@ -182,7 +182,7 @@ Be encouraging, specific, and actionable. Use their strengths to give personaliz
       {/* Header */}
       <div
         className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-        style={{ background: 'rgba(8,13,26,0.97)', backdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border)' }}
+        style={{ background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
       >
         <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--accent-muted)', border: '1px solid rgba(99,102,241,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Bot size={20} color="var(--accent)" />
@@ -190,7 +190,7 @@ Be encouraging, specific, and actionable. Use their strengths to give personaliz
         <div>
           <h1 style={{ fontSize: 16, fontWeight: 700 }}>AI Coach</h1>
           <div className="flex items-center gap-1.5">
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981' }} />
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--success)' }} />
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Online · Powered by Claude</span>
           </div>
         </div>
@@ -206,13 +206,13 @@ Be encouraging, specific, and actionable. Use their strengths to give personaliz
       {!isProfileSetup && (
         <div
           className="flex items-center gap-2 px-4 py-2.5"
-          style={{ background: 'rgba(245,158,11,0.1)', borderBottom: '1px solid rgba(245,158,11,0.2)' }}
+          style={{ background: 'rgba(244,180,0,0.08)', borderBottom: '1px solid rgba(244,180,0,0.18)' }}
         >
           <Sparkles size={14} color="#f59e0b" />
-          <span style={{ fontSize: 12, color: '#f59e0b', flex: 1 }}>
+          <span style={{ fontSize: 12, color: 'var(--warning)', flex: 1 }}>
             Set up your profile in Settings for personalized coaching
           </span>
-          <a href="/settings" style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <a href="/settings" style={{ fontSize: 11, color: 'var(--warning)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 2 }}>
             Setup <ChevronRight size={12} />
           </a>
         </div>
