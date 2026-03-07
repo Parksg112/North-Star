@@ -233,7 +233,7 @@ function YearlySection() {
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const yearlyGoals = goals.filter(g => (g.period === 'yearly' || g.period === 'custom') && g.status === 'active');
   const year = new Date().getFullYear();
-  const dayOfYear = Math.floor((Date.now() - new Date(`${year}-01-01`).getTime()) / 86400000) + 1;
+  const dayOfYear = Math.floor((new Date().getTime() - new Date(`${year}-01-01`).getTime()) / 86400000) + 1;
   const yearProgress = Math.round((dayOfYear / 365) * 100);
 
   return (

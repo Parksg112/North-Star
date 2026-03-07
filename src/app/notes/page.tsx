@@ -86,7 +86,7 @@ function NoteEditorModal({
           <Sparkles size={16} color="var(--accent)" />
           <div style={{ flex: 1, fontSize: 12, color: 'var(--text-primary)' }}>
             <span style={{ fontWeight: 600, color: 'var(--accent)' }}>Smart detect: </span>
-            "{detectedEvent.title}" at {detectedEvent.time}
+            &quot;{detectedEvent.title}&quot; at {detectedEvent.time}
           </div>
           <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>→ Calendar</span>
         </div>
@@ -362,7 +362,7 @@ export default function NotesPage() {
             </p>
             {!search && !activeTag && (
               <p style={{ fontSize: 13, color: 'var(--text-muted)', opacity: 0.6, marginTop: 4 }}>
-                Try "call John at 3pm" — it'll create a calendar reminder!
+                Try &quot;call John at 3pm&quot; — it&apos;ll create a calendar reminder!
               </p>
             )}
           </div>
@@ -385,7 +385,7 @@ export default function NotesPage() {
           <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)' }}>
             <Sparkles size={14} color="var(--accent)" />
             <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-              Smart notes detect calendar events. Try writing "dentist at 2pm" and it'll appear in your calendar!
+              Smart notes detect calendar events. Try writing &quot;dentist at 2pm&quot; and it&apos;ll appear in your calendar!
             </span>
           </div>
         </div>
