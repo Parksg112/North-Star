@@ -25,12 +25,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+        <style>{`@media(min-width:768px){#main-content{padding-left:220px!important;padding-bottom:0!important}}`}</style>
       </head>
       <body>
         <SideNav />
         <main
+          id="main-content"
           style={{ minHeight: '100dvh', paddingBottom: '72px' }}
-          className="md:pl-[220px] md:pb-0"
         >
           {children}
         </main>
